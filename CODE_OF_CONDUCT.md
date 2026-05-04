@@ -6,7 +6,7 @@ Este projecto é um espaço técnico. As interacções devem ser directas, respe
 
 ## O que se espera
 
-- Argumentar com código, dados ou raciocínio — não com autoridade ou volume
+- Argumentar com código, dados ou raciocínio, não com autoridade ou volume
 - Aceitar crítica técnica sem a tomar como pessoal
 - Ser específico: issues vagos e PRs sem contexto não ajudam ninguém
 

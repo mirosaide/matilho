@@ -1,8 +1,8 @@
 # Matilho
 
-Ferramenta gratuita e de código aberto para anotação de imagens para *computer vision* — desenvolvida para quem precisa de preparar datasets de detecção de objectos sem depender de plataformas pagas, subscrições ou ligação à internet.
+Ferramenta gratuita e de código aberto para anotação de imagens para *computer vision*, desenvolvida para quem precisa de preparar datasets de detecção de objectos sem depender de plataformas pagas, subscrições ou ligação à internet.
 
-O problema que resolve é simples: treinar um modelo de detecção exige milhares de imagens anotadas, e as ferramentas existentes são ou pagas, ou complexas de instalar, ou requerem servidores na nuvem. O Matilho corre directamente no browser, sem instalar nada — basta abrir um ficheiro HTML com um servidor local.
+O problema que resolve é simples: treinar um modelo de detecção exige milhares de imagens anotadas, e as ferramentas existentes são ou pagas, ou complexas de instalar, ou requerem servidores na nuvem. O Matilho corre directamente no browser, sem instalar nada, basta abrir um ficheiro HTML com um servidor local.
 
 ![Exemplo da interface do Matilho](exemplo.png)
 
@@ -21,7 +21,7 @@ O problema que resolve é simples: treinar um modelo de detecção exige milhare
 
 ## O que o software faz
 
-Permite desenhar caixas delimitadoras (*bounding boxes*) sobre imagens, associar cada caixa a uma classe (por exemplo: "gazela", "elefante", "veículo"), e exportar as anotações nos formatos padrão da indústria — prontos a usar directamente em frameworks como YOLOv8, Detectron2 ou TensorFlow Object Detection.
+Permite desenhar caixas delimitadoras (*bounding boxes*) sobre imagens, associar cada caixa a uma classe (por exemplo: gazela, elefante, veículo), e exportar as anotações nos formatos padrão da indústria, prontos a usar directamente em frameworks como YOLO, Detectron ou TensorFlow Object Detection.
 
 Para além da anotação básica, o software inclui três funcionalidades que normalmente só existem em ferramentas avançadas:
 
