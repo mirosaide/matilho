@@ -18,6 +18,3 @@
 # Node (se vier a usar para dev tools)
 node_modules/
 npm-debug.log*
-
-# Claude Code
-.claude/
