@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Matilho</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <h1>Matilho</h1>
+    </div>
+    <div class="actions">
+      <button id="btnNewProj"    class="ghost"   title="Novo projeto">Novo</button>
+      <button id="btnSaveProj"   class="ghost"   title="Guardar projeto como JSON">Guardar</button>
+      <button id="btnLoadProj"   class="ghost"   title="Abrir projeto JSON">Abrir</button>
+      <div class="separator"></div>
+      <button id="btnOpenImages"  class="primary" title="Adicionar imagens">Imagens</button>
+      <button id="btnOpenClasses" class="primary" title="Importar classes .txt">Classes</button>
+      <button id="btnImportYOLO"  class="primary" title="Importar anotações YOLO (.txt)">Importar YOLO</button>
+      <button id="btnAugment"     class="primary" title="Gerar augmentações do dataset">Augumentar</button>
+      <button id="btnQC"          class="ghost"   title="Verificar qualidade das imagens (blur)">QC</button>
+      <div class="separator"></div>
+      <button id="btnSaveYOLO" class="ok" title="Exportar YOLO + imagens + data.yaml">Exportar YOLO</button>
+      <button id="btnSaveCOCO" class="ok" title="Exportar COCO JSON">Exportar COCO</button>
+      <button id="btnSaveVOC"  class="ok" title="Exportar Pascal VOC XML">Exportar VOC</button>
+    </div>
+  </header>
+
+  <!-- Home principal de anotação -->
+  <main id="mainView" class="layout">
+
+    <aside class="sidebar">
+
+      <section class="card">
+        <h3>Imagens <span id="imgCount" class="chip">0</span></h3>
+        <input id="searchBox" class="full-input" placeholder="Filtrar por nome..." />
+        <div class="filter-bar">
+          <button class="filter-btn active" data-filter="all">Todas</button>
+          <button class="filter-btn" data-filter="annotated">Anotadas</button>
+          <button class="filter-btn" data-filter="empty">Sem anotações</button>
+        </div>
+        <ul id="imageList" class="list img-list"></ul>
+      </section>
+
+      <section class="card">
+        <h3>Classes <span id="clsCount" class="chip">0</span></h3>
+        <ul id="classList" class="list"></ul>
+        <div class="add-row">
+          <input id="newClassName" class="grow-input" placeholder="Nova classe..." />
+          <button id="btnAddClass" class="primary icon-btn" title="Adicionar classe">+</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>Estatísticas</h3>
+        <div id="statsBody" class="stats-body"></div>
+      </section>
+
+      <section class="card">
+        <h3>Atalhos</h3>
+        <ul class="shortcuts">
+          <li><kbd>V</kbd> Selecionar &nbsp; <kbd>B</kbd> Caixa</li>
+          <li><kbd>← →</kbd> Trocar imagem</li>
+          <li><kbd>1–9</kbd> Escolher classe</li>
+          <li><kbd>Tab</kbd> Próxima caixa</li>
+          <li><kbd>Del</kbd> Apagar caixa selecionada</li>
+          <li><kbd>R</kbd> Reatribuir classe à caixa</li>
+          <li><kbd>F</kbd> Ajustar zoom à imagem</li>
+          <li><kbd>+</kbd> / <kbd>−</kbd> Zoom in / out</li>
+          <li><kbd>Ctrl Z</kbd> Desfazer</li>
+          <li><kbd>Ctrl Y</kbd> Refazer</li>
+          <li><kbd>Ctrl C/V</kbd> Copiar / Colar</li>
+          <li><kbd>Ctrl D</kbd> Duplicar caixa</li>
+          <li><kbd>Botão dir.</kbd> Mover canvas</li>
+          <li><kbd>Roda</kbd> Zoom no cursor</li>
+        </ul>
+      </section>
+
+    </aside>
+
+    <section class="stageWrap">
+      <div class="toolbar">
+        <div class="group">
+          <button id="toolSelect" class="toggle active" data-tool="select" title="[V]">Selecionar</button>
+          <button id="toolBox"    class="toggle"        data-tool="box"    title="[B]">Caixa</button>
+        </div>
+        <div class="group">
+          <label>Zoom</label>
+          <input id="zoomRange" type="range" min="0.05" max="10" step="0.05" value="1" />
+          <span id="zoomLabel">100%</span>
+        </div>
+        <div class="group">
+          <label>Classe</label>
+          <select id="activeClass"></select>
+        </div>
+        <div class="group ml-auto">
+          <button id="toggleGrid"   class="toggle active" title="Grelha">Grelha</button>
+          <button id="toggleLabels" class="toggle active" title="Rótulos">Rótulos</button>
+        </div>
+      </div>
+
+      <div class="canvasPane" id="canvasPane">
+        <canvas id="stage"></canvas>
+        <div id="canvasEmpty" class="canvas-empty">
+          <p class="empty-title">Sem imagens carregadas</p>
+          <p class="empty-sub">Clica em <strong>Imagens</strong> ou arrasta ficheiros aqui</p>
+        </div>
+      </div>
+
+      <footer class="statusbar">
+        <span id="status">Done</span>
+        <span id="boxInfo"></span>
+        <span id="cursor">x:— y:—</span>
+        <span id="imageMeta">—</span>
+      </footer>
+    </section>
+  </main>
+
+  <!-- Quality Check -->
+  <div id="qcView" class="qc-view" hidden>
+    <div class="qc-header">
+      <div class="qc-nav">
+        <button id="btnQCBack" class="ghost">← Voltar à anotação</button>
+        <h2>Quality Check — Detecção de Blur</h2>
+      </div>
+      <p class="qc-explanation">
+        Algoritmo: <strong>Variância do Laplaciano</strong> — detecta bordas na imagem e mede o seu contraste.
+        Scores altos indicam imagens nítidas; scores baixos indicam desfoque.
+        Ajusta o threshold até ao ponto que separa as imagens utilizáveis das descartáveis.
+      </p>
+      <div class="qc-controls">
+        <div class="qc-threshold-wrap">
+          <label>Threshold de nitidez: <strong id="qcThresholdVal">80</strong></label>
+          <input type="range" id="qcThreshold" min="10" max="1000" value="80" />
+          <small>abaixo = desfocada · acima = nítida</small>
+        </div>
+        <div class="qc-actions">
+          <span id="qcSummary" class="qc-summary-text"></span>
+          <button id="btnAnalyseAll"   class="primary">Analisar todas</button>
+          <button id="btnSelectFailed" class="ghost">Selec. desfocadas</button>
+          <button id="btnDeleteQC"     class="err">Apagar seleccionadas</button>
+        </div>
+      </div>
+    </div>
+    <div id="qcGrid" class="qc-grid"></div>
+  </div>
+
+  <!-- Modal de Augmentação -->
+  <div id="augModal" class="modal-overlay" hidden>
+    <div class="modal-box aug-modal-box">
+      <h3 class="aug-title">Aumentar dados</h3>
+
+      <div class="aug-section">
+        <p class="aug-label">Transformações</p>
+        <div id="augOptions" class="aug-options"></div>
+      </div>
+
+      <div class="aug-section">
+        <p class="aug-label">Aplicar a</p>
+        <div class="aug-scope">
+          <label><input type="radio" name="augScope" value="current" checked /> Imagem actual</label>
+          <label><input type="radio" name="augScope" value="all" /> Todas as imagens</label>
+        </div>
+      </div>
+
+      <div id="augProgress" class="aug-progress" hidden>
+        <div id="augProgressBar" class="aug-progress-bar" style="width:0%"></div>
+        <span id="augProgressText">0/0</span>
+      </div>
+
+      <div class="modal-actions">
+        <button id="augGenBtn"   class="ok">Gerar</button>
+        <button id="augCloseBtn" class="ghost">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal genérico -->
+  <div id="modal" class="modal-overlay" hidden aria-modal="true" role="dialog">
+    <div class="modal-box">
+      <p id="modalMsg" class="modal-msg"></p>
+      <input id="modalInput" class="modal-input" hidden />
+      <div class="modal-actions">
+        <button id="modalOk"     class="primary">OK</button>
+        <button id="modalCancel" class="ghost">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast" hidden aria-live="polite"></div>
+
+  <!-- Inputs ocultos -->
+  <input id="inputImages"  type="file" accept="image/*"  multiple hidden />
+  <input id="inputClasses" type="file" accept=".txt"              hidden />
+  <input id="inputYOLO"    type="file" accept=".txt"     multiple hidden />
+  <input id="inputProject" type="file" accept=".json"             hidden />
+
+  <footer class="credits">
+    <strong>Matilho v1.0</strong> · por <strong>Miro Saide</strong> ·
+    MIT License · <a href="https://github.com/mirosaide/matilho" target="_blank" rel="noopener">Open Source</a>
+  </footer>
+
+  <script src="libs/jszip.min.js"></script>
+  <script src="libs/filesaver.min.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
