@@ -1,17 +1,12 @@
 # Matilho
 
-Ferramenta gratuita e de código aberto para anotação de imagens de *computer vision* — desenvolvida para quem precisa de preparar datasets de detecção de objectos sem depender de plataformas pagas, subscrições ou ligação à internet.
+Ferramenta gratuita e de código aberto para anotação de imagens para *computer vision* — desenvolvida para quem precisa de preparar datasets de detecção de objectos sem depender de plataformas pagas, subscrições ou ligação à internet.
 
 O problema que resolve é simples: treinar um modelo de detecção exige milhares de imagens anotadas, e as ferramentas existentes são ou pagas, ou complexas de instalar, ou requerem servidores na nuvem. O Matilho corre directamente no browser, sem instalar nada — basta abrir um ficheiro HTML com um servidor local.
 
 ---
 
-## Screenshots
 
-<!-- Adiciona screenshots da interface aqui antes de publicar -->
-<!-- Sugestão: ecrã principal com bounding boxes desenhadas, painel de export, quality check -->
-
----
 
 ## Para quem é útil
 
@@ -90,6 +85,8 @@ cd matilho
 # Python 3
 python -m http.server 8080
 
+ou
+
 # Node.js
 npx serve .
 ```
@@ -102,14 +99,7 @@ Abre `http://localhost:8080` no browser.
 
 ---
 
-## O que o distingue das alternativas
-
-Não requer conta, não envia dados para servidores, não tem limite de imagens, não expira. É software local, privado e permanentemente gratuito. O código-fonte está disponível para quem quiser adaptar, melhorar ou integrar noutros projectos.
-
----
 
 ## Licença
 
-MIT License © 2025 Miro Saide
-
-Podes usar, copiar, modificar e distribuir livremente — incluindo em projectos comerciais — desde que mantenhas o aviso de copyright.
+MIT License © 2026 Miro Saide

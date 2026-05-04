@@ -1,6 +1,6 @@
 # Contributing
 
-Contribuições são bem-vindas. Antes de abrir um PR, lê isto.
+Contribuições são bem-vindas.
 
 ## O que é bem-vindo
 

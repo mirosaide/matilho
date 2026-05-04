@@ -1,8 +1,5 @@
 # Changelog
 
-## [1.0.0] — 2025-11-11
-
-Versão inicial pública.
 
 ### Funcionalidades
 - Anotação de bounding boxes com canvas interactivo
