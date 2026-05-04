@@ -4,6 +4,8 @@ Ferramenta gratuita e de código aberto para anotação de imagens para *compute
 
 O problema que resolve é simples: treinar um modelo de detecção exige milhares de imagens anotadas, e as ferramentas existentes são ou pagas, ou complexas de instalar, ou requerem servidores na nuvem. O Matilho corre directamente no browser, sem instalar nada — basta abrir um ficheiro HTML com um servidor local.
 
+![Exemplo da interface do Matilho](exemplo.png)
+
 ---
 
 
